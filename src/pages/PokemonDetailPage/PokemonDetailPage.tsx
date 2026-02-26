@@ -43,21 +43,18 @@ export function PokemonDetailPage() {
         </p>
       ) : (
         <>
-          {/* ✅ keep labels always visible (tests + UI stability) */}
           <div className="detailCard">
             <div className="detailGrid">
-              {/* LEFT */}
+
               <section>
                 <div className="metaGrid">
                   <div>
                     <div className="metaLabel">Height</div>
-                    {/* ✅ tests look for "height" text */}
                     <div className="metaValue">{query.data?.height ?? "—"}</div>
                   </div>
 
                   <div>
                     <div className="metaLabel">Weight</div>
-                    {/* ✅ tests look for "weight" text */}
                     <div className="metaValue">{query.data?.weight ?? "—"}</div>
                   </div>
                 </div>
@@ -73,7 +70,6 @@ export function PokemonDetailPage() {
                 </div>
               </section>
 
-              {/* RIGHT */}
               <section>
                 <div className="sectionTitle">Stats</div>
 
