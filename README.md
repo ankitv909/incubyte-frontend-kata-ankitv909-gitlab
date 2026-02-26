@@ -5,8 +5,7 @@ A production-ready Pokémon web application built with **React + TypeScript** us
 ---
 
 ## Live Demo
-**Live URL:** <PASTE_DEPLOYED_LINK_HERE>
-
+Live URL: https://incubyte-frontend-kata-ankitv909-ap.vercel.app/
 ---
 
 ## Screenshots
