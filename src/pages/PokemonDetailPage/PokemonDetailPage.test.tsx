@@ -5,13 +5,13 @@ import { AppProviders } from "../../app/AppProviders";
 import { PokemonListPage } from "../PokemonListPage/PokemonListPage";
 import { PokemonDetailPage } from "./PokemonDetailPage";
 
-function renderApp() {
+function renderAppAt(path: string) {
   const router = createMemoryRouter(
     [
       { path: "/", element: <PokemonListPage /> },
       { path: "/pokemon/:name", element: <PokemonDetailPage /> },
     ],
-    { initialEntries: ["/"] }
+    { initialEntries: [path] }
   );
 
   render(
@@ -21,14 +21,14 @@ function renderApp() {
   );
 }
 
-test("navigates to pokemon detail page when a pokemon is clicked", async () => {
-  renderApp();
+test("shows loading then renders pokemon detail", async () => {
+  renderAppAt("/pokemon/bulbasaur");
 
-  // wait for list
-  const bulba = await screen.findByRole("link", { name: /bulbasaur/i });
+  expect(screen.getByRole("status")).toHaveTextContent(/loading/i);
 
-  await userEvent.click(bulba);
+  expect(await screen.findByRole("heading", { name: /bulbasaur/i }))
+    .toBeInTheDocument();
 
-  // detail page should load and show heading/name
-  expect(await screen.findByRole("heading", { name: /bulbasaur/i })).toBeInTheDocument();
+  expect(screen.getByText(/height/i)).toBeInTheDocument();
+  expect(screen.getByText(/weight/i)).toBeInTheDocument();
 });
