@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPokemonList } from "../../api/pokeApi";
+import { Link } from "react-router-dom";
 
 export function PokemonListPage() {
   const [q, setQ] = useState("");
@@ -37,7 +38,9 @@ export function PokemonListPage() {
       {query.data && (
         <ul aria-label="pokemon list" style={{ marginTop: 12 }}>
           {filtered.map((p) => (
-            <li key={p.name}>{p.name}</li>
+           <li key={p.name}>
+             <Link to={`/pokemon/${p.name}`}>{p.name}</Link>
+           </li>
           ))}
         </ul>
       )}
