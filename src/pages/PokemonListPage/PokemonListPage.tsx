@@ -18,29 +18,53 @@ export function PokemonListPage() {
     return items.filter((p) => p.name.toLowerCase().includes(term));
   }, [q, query.data]);
 
+  const showEmpty =
+    query.data && !query.isLoading && !query.isError && filtered.length === 0;
+
   return (
-    <main style={{ padding: 16 }}>
-      <h1>Pokémon</h1>
+    <main className="page">
+      <header className="header">
+        <h1>Pokémon</h1>
 
-      <label style={{ display: "block", marginTop: 12 }}>
-        <span style={{ display: "block", marginBottom: 6 }}>Filter by name</span>
-        <input
-          aria-label="Filter by name"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="e.g. bulba"
-        />
-      </label>
+        <label className="label">
+          <span className="labelText">Filter by name</span>
+          <input
+            aria-label="Filter by name"
+            className="input"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="e.g. bulba"
+          />
+        </label>
+      </header>
 
-      {query.isLoading && <p role="status">Loading...</p>}
-      {query.isError && <p role="alert">Failed to load Pokémon.</p>}
+      {query.isLoading && (
+        <p role="status" className="status">
+          Loading...
+        </p>
+      )}
 
-      {query.data && (
-        <ul aria-label="pokemon list" style={{ marginTop: 12 }}>
+      {query.isError && (
+        <p role="alert" className="status">
+          Failed to load Pokémon.
+        </p>
+      )}
+
+      {showEmpty && (
+        <p className="status">
+          No Pokémon found for <strong>{q.trim()}</strong>
+        </p>
+      )}
+
+      {query.data && !query.isLoading && !query.isError && (
+        <ul aria-label="pokemon list" className="grid">
           {filtered.map((p) => (
-           <li key={p.name}>
-             <Link to={`/pokemon/${p.name}`}>{p.name}</Link>
-           </li>
+            <li key={p.name} className="gridItem">
+              <Link to={`/pokemon/${p.name}`} className="card">
+                <div className="cardTitle">{p.name}</div>
+                <div className="cardSub">View details →</div>
+              </Link>
+            </li>
           ))}
         </ul>
       )}

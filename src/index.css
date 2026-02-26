@@ -1,11 +1,20 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --bg: #121212;
+  --panel: #1b1b1b;
+  --panel2: #202020;
+  --text: rgba(255, 255, 255, 0.9);
+  --muted: rgba(255, 255, 255, 0.65);
+  --border: rgba(255, 255, 255, 0.10);
+  --link: #7c83ff;
+
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark;
+  color: var(--text);
+  background-color: var(--bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,56 +22,216 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
+/* ✅ IMPORTANT: remove Vite's "center everything" layout */
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  display: block;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+  font-weight: 600;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* --------- App Layout --------- */
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.header {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  margin: 0;
+  font-size: 44px;
+  letter-spacing: -0.02em;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.label {
+  display: grid;
+  gap: 6px;
+  max-width: 360px;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.labelText {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  outline: none;
+}
+.input:focus {
+  border-color: rgba(124, 131, 255, 0.55);
+  box-shadow: 0 0 0 3px rgba(124, 131, 255, 0.15);
+}
+
+/* --------- List Grid --------- */
+.grid {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (min-width: 520px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  a:hover {
-    color: #747bff;
+}
+@media (min-width: 860px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+.gridItem {
+  margin: 0;
+}
+
+.card {
+  display: block;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--panel), var(--panel2));
+  padding: 14px 14px 12px;
+  transition: transform 0.08s ease, border-color 0.2s ease;
+}
+.card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(124, 131, 255, 0.45);
+  text-decoration: none;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.cardSub {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* --------- Detail Page --------- */
+.detailHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.backLink:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: linear-gradient(180deg, var(--panel), var(--panel2));
+  padding: 16px;
+}
+
+.metaGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+@media (min-width: 720px) {
+  .metaGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+.metaItemTitle {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.metaItemValue {
+  font-weight: 700;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.03);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+@media (min-width: 720px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.statRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.statName {
+  color: var(--muted);
+  text-transform: capitalize;
+  font-weight: 700;
+}
+
+.statValue {
+  font-weight: 900;
 }

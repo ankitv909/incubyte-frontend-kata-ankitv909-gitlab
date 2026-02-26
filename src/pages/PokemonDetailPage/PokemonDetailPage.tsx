@@ -1,39 +1,83 @@
-import { useParams } from "react-router-dom";
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-
-const API = "https://pokeapi.co/api/v2";
-
-type PokemonDetail = {
-  name: string;
-  height: number;
-  weight: number;
-};
-
-async function fetchPokemonDetail(name: string): Promise<PokemonDetail> {
-  const res = await fetch(`${API}/pokemon/${name}`);
-  if (!res.ok) throw new Error("Failed to fetch pokemon detail");
-  return res.json();
-}
+import { Link, useParams } from "react-router-dom";
+import { getPokemonByName } from "../../api/pokeApi";
 
 export function PokemonDetailPage() {
   const { name = "" } = useParams();
 
-  const { data, isLoading } = useQuery({
+  const query = useQuery({
     queryKey: ["pokemon-detail", name],
-    queryFn: () => fetchPokemonDetail(name),
-    enabled: !!name,
+    queryFn: () => getPokemonByName(name),
+    enabled: Boolean(name),
   });
 
-  return (
-    <main style={{ padding: 16 }}>
-      {isLoading && <div role="status">Loading...</div>}
+  const types = useMemo(() => {
+    const t = query.data?.types ?? [];
+    return t
+      .slice()
+      .sort((a, b) => a.slot - b.slot)
+      .map((x) => x.type.name);
+  }, [query.data]);
 
-      {data && (
-        <>
-          <h1>{data.name}</h1>
-          <p>Height: {data.height}</p>
-          <p>Weight: {data.weight}</p>
-        </>
+  const stats = useMemo(() => {
+    const s = query.data?.stats ?? [];
+    return s.map((x) => ({
+      name: x.stat.name.replace("-", " "),
+      value: x.base_stat,
+    }));
+  }, [query.data]);
+
+  return (
+    <main className="page">
+      <div className="detailHeader">
+        <h1 style={{ textTransform: "capitalize" }}>{name || "Pokémon"}</h1>
+
+        <Link to="/" className="backLink">
+          ← Back to list
+        </Link>
+      </div>
+
+      {query.isLoading && <p role="status">Loading...</p>}
+      {query.isError && <p role="alert">Failed to load Pokémon details.</p>}
+
+      {query.data && (
+        <section className="panel" aria-label="pokemon details">
+          <div className="metaGrid">
+            <div>
+              <div className="metaItemTitle">Height</div>
+              <div className="metaItemValue">{query.data.height}</div>
+            </div>
+
+            <div>
+              <div className="metaItemTitle">Weight</div>
+              <div className="metaItemValue">{query.data.weight}</div>
+            </div>
+
+            <div>
+              <div className="metaItemTitle">Types</div>
+              <div className="chips" aria-label="pokemon types">
+                {types.map((t) => (
+                  <span key={t} className="chip">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className="metaItemTitle">Stats</div>
+              <div className="statsGrid" aria-label="pokemon stats">
+                {stats.map((s) => (
+                  <div key={s.name} className="statRow">
+                    <span className="statName">{s.name}</span>
+                    <span className="statValue">{s.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
       )}
     </main>
   );
